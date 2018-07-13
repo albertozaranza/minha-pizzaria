@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "393856616622",
+    "firebase_url": "https://minha-pizzaria.firebaseio.com",
+    "project_id": "minha-pizzaria",
+    "storage_bucket": "minha-pizzaria.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393856616622:android:43da429cbe0b0a30",
+        "android_client_info": {
+          "package_name": "com.agenciaalcateia.minhapizzaria"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "393856616622-ooc0bld60qhqe4ceocnrsg4e0nf7t9c6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.agenciaalcateia.minhapizzaria",
+            "certificate_hash": "44acc4dbfe3bfe3e62f019e39d3e387f175cdedb"
+          }
+        },
+        {
+          "client_id": "393856616622-uqh77obd68bu58d49otsvr5kmgb8f2uq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiOAQCS3Dw3dx5vatgU5NbxjBhFtIj_TE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393856616622-uqh77obd68bu58d49otsvr5kmgb8f2uq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
