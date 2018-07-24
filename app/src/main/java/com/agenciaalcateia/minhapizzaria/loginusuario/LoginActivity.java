@@ -42,8 +42,7 @@ import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Button buttonLogarEmail, buttonLogarFacebook;
-    private SignInButton signInButton;
+    private Button buttonLogarEmail, buttonLogarFacebook, buttonLogarGoogle;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth firebaseAuth;
     private CallbackManager mCallbackManager;
@@ -58,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
         buttonLogarEmail = findViewById(R.id.btn_logar_email);
         buttonLogarFacebook = findViewById(R.id.btn_logar_facebook);
-        signInButton = findViewById(R.id.btn_logar_google);
+        buttonLogarGoogle = findViewById(R.id.btn_logar_google);
 
         buttonLogarEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        buttonLogarGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signInWithGoogle();
@@ -131,7 +130,6 @@ public class LoginActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 // ...
-                Log.d("ERROG", e.toString());
             }
         }
 
@@ -158,9 +156,10 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             abrirTelaPrincipal();
                             Toast.makeText(LoginActivity.this, "Logado com sucesso", Toast.LENGTH_SHORT).show();
+
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Autenticação falhou.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

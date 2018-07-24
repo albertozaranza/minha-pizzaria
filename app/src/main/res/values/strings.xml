@@ -5,6 +5,7 @@
     <string name="logar">Logar</string>
     <string name="logar_email">Entrar com o email</string>
     <string name="logar_facebook">Entrar com o facebook</string>
+    <string name="logar_google">Entrar com o Google</string>
     <string name="text_cadastrar">Cadastrar-se</string>
     <string name="nome">Nome</string>
     <string name="confirmacao_senha">Confirme sua senha</string>
@@ -14,4 +15,6 @@
     <-->
     <string name="facebook_app_id">266160540606075</string>
     <string name="fb_login_protocol_scheme">fb266160540606075</string>
+    <string name="sair">Sair</string>
+
 </resources>
