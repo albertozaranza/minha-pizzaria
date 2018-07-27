@@ -7,17 +7,31 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.agenciaalcateia.minhapizzaria.adapter.ProdutoAdapter;
+import com.agenciaalcateia.minhapizzaria.config.ConfiguracaoFirebase;
+import com.agenciaalcateia.minhapizzaria.model.Produto;
+import com.agenciaalcateia.minhapizzaria.model.Usuario;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CardapioFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CardapioFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.Comparator;
+
 public class CardapioFragment extends Fragment {
+
+    private ListView listView;
+    private ArrayAdapter arrayAdapter;
+    private ArrayList<Produto> cardapio;
+    private DatabaseReference databaseReference;
+    private ValueEventListener valueEventListenerProdutos;
+    private Query query;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -63,8 +77,43 @@ public class CardapioFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        cardapio = new ArrayList<>();
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cardapio, container, false);
+        View view = inflater.inflate(R.layout.fragment_cardapio, container, false);
+
+        listView = view.findViewById(R.id.lv_cardapio);
+
+        arrayAdapter = new ProdutoAdapter(
+                getActivity(),
+                cardapio
+        );
+
+        listView.setAdapter(arrayAdapter);
+
+        //databaseReference = ConfiguracaoFirebase.getFirebase().child("produto");
+
+        query = ConfiguracaoFirebase.getFirebase().child("produto").orderByChild("tipo");
+
+        valueEventListenerProdutos = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                cardapio.clear();
+                for(DataSnapshot produtos : dataSnapshot.getChildren()){
+                    Produto produto = produtos.getValue(Produto.class);
+                    cardapio.add(produto);
+                }
+                arrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -104,5 +153,17 @@ public class CardapioFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        query.addValueEventListener(valueEventListenerProdutos);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        query.removeEventListener(valueEventListenerProdutos);
     }
 }

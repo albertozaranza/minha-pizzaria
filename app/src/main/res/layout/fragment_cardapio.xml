@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".CardapioFragment">
 
-    <TextView
+    <ListView
+        android:id="@+id/lv_cardapio"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textSize="30dp"
-        android:text="Tab 1" />
+        android:layout_height="match_parent"
+        android:divider="#CCCCCC"
+        android:dividerHeight="1dp"/>
 
 </RelativeLayout>
