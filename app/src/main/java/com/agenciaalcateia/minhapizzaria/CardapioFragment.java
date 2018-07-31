@@ -92,7 +92,7 @@ public class CardapioFragment extends Fragment {
 
         listView.setAdapter(arrayAdapter);
 
-        //databaseReference = ConfiguracaoFirebase.getFirebase().child("produto");
+        // TODO: 31/07/2018  MUDAR O NOME DA TABELA PARA "PRDUTOS"
 
         query = ConfiguracaoFirebase.getFirebase().child("produto").orderByChild("tipo");
 

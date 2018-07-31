@@ -47,9 +47,11 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".loginusuario.LoginEmailActivity"
+        <activity
+            android:name=".loginusuario.LoginEmailActivity"
             android:parentActivityName=".loginusuario.LoginEmailActivity"
             tools:targetApi="jelly_bean" />
+        <activity android:name=".NovoPedidoActivity"></activity>
     </application>
 
 </manifest>

@@ -5,11 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".PedidosFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btn_novo_pedido"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textSize="30dp"
-        android:text="Tab 2" />
+        android:layout_alignParentTop="true"
+        android:theme="@style/Base.Theme.AppCompat.Light"
+        android:text="Novo pedido"/>
+
+    <ListView
+        android:id="@+id/lv_cardapio"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@id/btn_novo_pedido"
+        android:divider="#CCCCCC"
+        android:dividerHeight="1dp"/>
 
 </RelativeLayout>
