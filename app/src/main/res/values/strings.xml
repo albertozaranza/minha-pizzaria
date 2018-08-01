@@ -16,5 +16,8 @@
     <string name="facebook_app_id">266160540606075</string>
     <string name="fb_login_protocol_scheme">fb266160540606075</string>
     <string name="sair">Sair</string>
+    <string name="adicionar_produto">Adicionar produto</string>
+    <string name="finalizar_pedido">Finalizar pedido</string>
+    <string name="novo_pedido">Novo pedido</string>
 
 </resources>

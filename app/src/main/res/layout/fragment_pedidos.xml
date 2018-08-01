@@ -5,20 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".PedidosFragment">
 
+    <ListView
+        android:id="@+id/lv_pedidos"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:divider="#CCCCCC"
+        android:dividerHeight="1dp"
+        android:layout_above="@+id/btn_novo_pedido"/>
+
     <Button
         android:id="@+id/btn_novo_pedido"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:theme="@style/Base.Theme.AppCompat.Light"
-        android:text="Novo pedido"/>
-
-    <ListView
-        android:id="@+id/lv_cardapio"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_below="@id/btn_novo_pedido"
-        android:divider="#CCCCCC"
-        android:dividerHeight="1dp"/>
+        android:text="@string/novo_pedido"/>
 
 </RelativeLayout>

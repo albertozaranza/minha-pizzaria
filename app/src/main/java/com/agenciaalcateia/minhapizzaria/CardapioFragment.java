@@ -28,7 +28,6 @@ public class CardapioFragment extends Fragment {
     private ListView listView;
     private ArrayAdapter arrayAdapter;
     private ArrayList<Produto> cardapio;
-    private DatabaseReference databaseReference;
     private ValueEventListener valueEventListenerProdutos;
     private Query query;
 
@@ -92,9 +91,7 @@ public class CardapioFragment extends Fragment {
 
         listView.setAdapter(arrayAdapter);
 
-        // TODO: 31/07/2018  MUDAR O NOME DA TABELA PARA "PRDUTOS"
-
-        query = ConfiguracaoFirebase.getFirebase().child("produto").orderByChild("tipo");
+        query = ConfiguracaoFirebase.getFirebase().child("produtos").orderByChild("tipo");
 
         valueEventListenerProdutos = new ValueEventListener() {
             @Override

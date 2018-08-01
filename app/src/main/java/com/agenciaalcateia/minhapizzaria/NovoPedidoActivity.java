@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.agenciaalcateia.minhapizzaria.config.ConfiguracaoFirebase;
+import com.agenciaalcateia.minhapizzaria.model.Pedido;
 import com.agenciaalcateia.minhapizzaria.model.Usuario;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,16 +23,16 @@ public class NovoPedidoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_novo_pedido);
 
-        buttonAdicionarPedido = findViewById(R.id.btn_adicionar_pedido);
+        buttonAdicionarPedido = findViewById(R.id.btn_finalizaar_pedido);
 
         buttonAdicionarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseReference = ConfiguracaoFirebase.getFirebase().child("pedidos");
-                Usuario usuario = new Usuario();
-                usuario.setNome(firebaseUser.getDisplayName());
-                usuario.setEmail(firebaseUser.getEmail());
-                databaseReference.push().setValue(usuario);
+                databaseReference = ConfiguracaoFirebase.getFirebase().child("pedidos").child(firebaseUser.getUid());
+                Pedido pedido = new Pedido();
+                pedido.setProdutos("Pizza + Coca");
+                pedido.setValor("20,00");
+                databaseReference.push().setValue(pedido);
             }
         });
     }
