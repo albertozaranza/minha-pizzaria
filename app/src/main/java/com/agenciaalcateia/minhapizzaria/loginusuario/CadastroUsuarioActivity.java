@@ -1,8 +1,8 @@
 package com.agenciaalcateia.minhapizzaria.loginusuario;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;

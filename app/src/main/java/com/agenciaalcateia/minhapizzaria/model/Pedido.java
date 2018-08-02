@@ -1,7 +1,5 @@
 package com.agenciaalcateia.minhapizzaria.model;
 
-import java.util.ArrayList;
-
 public class Pedido {
 
     private String produtos;
