@@ -52,7 +52,7 @@
             android:parentActivityName=".loginusuario.LoginEmailActivity"
             tools:targetApi="jelly_bean" />
         <activity android:name=".NovoPedidoActivity" />
-        <activity android:name=".CardapioActivity"></activity>
+        <activity android:name=".CarrinhoActivity"></activity>
     </application>
 
 </manifest>

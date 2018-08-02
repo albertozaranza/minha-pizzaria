@@ -10,11 +10,14 @@
         layout="@layout/toolbar"/>
 
     <ListView
+        android:layout_below="@id/toolbar"
         android:id="@+id/lv_carrinho"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_above="@id/linear_layout"/>
 
     <LinearLayout
+        android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

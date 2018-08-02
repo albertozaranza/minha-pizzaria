@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class CardapioActivity extends AppCompatActivity {
+public class CarrinhoActivity extends AppCompatActivity {
 
     private ListView listView;
     private ArrayAdapter arrayAdapter;
@@ -64,7 +64,7 @@ public class CardapioActivity extends AppCompatActivity {
                 nome = produto.getNome() + " " + produto.getSabor();
 
                 if(produto.getTipo().equals("1")){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CardapioActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CarrinhoActivity.this);
 
                     View mView = getLayoutInflater().inflate(R.layout.dialog_pizza, null);
 
@@ -108,7 +108,7 @@ public class CardapioActivity extends AppCompatActivity {
                     dialog.show();
 
                 } else if(produto.getTipo().equals("2")){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CardapioActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CarrinhoActivity.this);
 
                     View mView = getLayoutInflater().inflate(R.layout.dialog_produto, null);
 
@@ -120,6 +120,7 @@ public class CardapioActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                 quantidade = editTextQuantidade.getText().toString();
+                                valor = produto.getValor();
 
                                 carrinho.setProdudo(nome);
                                 carrinho.setQuantidade(quantidade);
