@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.agenciaalcateia.minhapizzaria.adapter.PagerAdapter;
 import com.agenciaalcateia.minhapizzaria.loginusuario.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

@@ -1,8 +1,11 @@
-package com.agenciaalcateia.minhapizzaria;
+package com.agenciaalcateia.minhapizzaria.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.agenciaalcateia.minhapizzaria.CardapioFragment;
+import com.agenciaalcateia.minhapizzaria.PedidosFragment;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 

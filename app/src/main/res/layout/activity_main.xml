@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
 
     <include android:id="@+id/toolbar"
@@ -15,6 +16,7 @@
        android:minHeight="?attr/actionBarSize"
        android:theme="?attr/actionBarTheme"
        android:id="@+id/tab_layout"
+       app:tabTextColor="@android:color/white"
        android:layout_below="@id/toolbar"/>
 
     <android.support.v4.view.ViewPager

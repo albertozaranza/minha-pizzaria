@@ -47,15 +47,15 @@ public class ProdutoAdapter extends ArrayAdapter<Produto> {
             Produto produto = produtos.get(position);
 
             nome = produto.getNome() + " " + produto.getSabor();
-            precos = "P: R$" + produto.getPrecoP() + " / M: R$" + produto.getPrecoM() + " / G: R$" + produto.getPrecoG();
-            valor = "R$" + produto.getValor();
 
             textViewNome.setText(nome);
 
             if(produto.getTipo().equals("1")){
+                precos = "P: R$" + produto.getPrecoP() + " / M: R$" + produto.getPrecoM() + " / G: R$" + produto.getPrecoG();
                 textViewPreco.setText(precos);
                 textViewValor.setVisibility(View.GONE);
             } else if (produto.getTipo().equals("2")){
+                valor = "R$" + produto.getValor();
                 textViewValor.setText(valor);
                 textViewPreco.setVisibility(View.GONE);
             }

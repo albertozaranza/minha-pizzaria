@@ -24,15 +24,13 @@
             android:id="@+id/btn_adicionar_produto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/adicionar_produto"
-            android:theme="@style/Base.Theme.AppCompat.Light" />
+            android:text="@string/adicionar_produto"/>
 
         <Button
             android:id="@+id/btn_finalizaar_pedido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/finalizar_pedido"
-            android:theme="@style/Base.Theme.AppCompat.Light" />
+            android:text="@string/finalizar_pedido"/>
 
     </LinearLayout>
 

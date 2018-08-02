@@ -74,10 +74,10 @@ public class CardapioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        cardapio = new ArrayList<>();
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cardapio, container, false);
+
+        cardapio = new ArrayList<>();
 
         listView = view.findViewById(R.id.lv_cardapio);
 

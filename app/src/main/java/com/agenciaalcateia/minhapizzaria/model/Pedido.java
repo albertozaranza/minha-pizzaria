@@ -4,6 +4,7 @@ public class Pedido {
 
     private String produtos;
     private String valor;
+    private String data;
 
     public Pedido() {
     }
@@ -22,5 +23,13 @@ public class Pedido {
 
     public void setValor(String valor) {
         this.valor = valor;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 }

@@ -19,10 +19,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 /**
@@ -40,7 +41,7 @@ public class PedidosFragment extends Fragment {
     private ListView listView;
     private ValueEventListener valueEventListenerPedidos;
     private FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    private DatabaseReference databaseReference;
+    private Query query;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -110,7 +111,7 @@ public class PedidosFragment extends Fragment {
 
         listView.setAdapter(arrayAdapter);
 
-        databaseReference = ConfiguracaoFirebase.getFirebase().child("pedidos").child(firebaseUser.getUid());
+        query = ConfiguracaoFirebase.getFirebase().child("pedidos").child(firebaseUser.getUid()).orderByChild("data");
 
         valueEventListenerPedidos = new ValueEventListener() {
             @Override
@@ -120,6 +121,7 @@ public class PedidosFragment extends Fragment {
                     Pedido pedido = ids.getValue(Pedido.class);
                     pedidos.add(pedido);
                 }
+                Collections.reverse(pedidos);
                 arrayAdapter.notifyDataSetChanged();
             }
 
@@ -174,12 +176,12 @@ public class PedidosFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        databaseReference.addValueEventListener(valueEventListenerPedidos);
+        query.addValueEventListener(valueEventListenerPedidos);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        databaseReference.removeEventListener(valueEventListenerPedidos);
+        query.removeEventListener(valueEventListenerPedidos);
     }
 }
