@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 
 import com.agenciaalcateia.minhapizzaria.adapter.PedidoAdapter;
 import com.agenciaalcateia.minhapizzaria.config.ConfiguracaoFirebase;
@@ -23,7 +23,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 
 /**
@@ -36,9 +35,9 @@ import java.util.Collections;
  */
 public class PedidosFragment extends Fragment {
 
-    private ArrayAdapter arrayAdapter;
-    private ArrayList<Pedido> pedidos;
-    private ListView listView;
+    private RecyclerView recyclerView;
+    private PedidoAdapter pedidoAdapter;
+    private ArrayList<Pedido> pedidos = new ArrayList<>();
     private ValueEventListener valueEventListenerPedidos;
     private FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private Query query;
@@ -91,11 +90,7 @@ public class PedidosFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_pedidos, container, false);
 
-        pedidos = new ArrayList<>();
-
         Button buttonNovoPedido = view.findViewById(R.id.btn_novo_pedido);
-
-        listView = view.findViewById(R.id.lv_pedidos);
 
         buttonNovoPedido.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,34 +99,41 @@ public class PedidosFragment extends Fragment {
             }
         });
 
-        arrayAdapter = new PedidoAdapter(
+        recyclerView = view.findViewById(R.id.rv_cardapio);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+
+        pedidoAdapter = new PedidoAdapter(
                 getActivity(),
                 pedidos
         );
 
-        listView.setAdapter(arrayAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(pedidoAdapter);
 
         query = ConfiguracaoFirebase.getFirebase().child("pedidos").child(firebaseUser.getUid()).orderByChild("data");
 
-        valueEventListenerPedidos = new ValueEventListener() {
+        return view;
+    }
+
+    public void listarPedidos(){
+
+        valueEventListenerPedidos = query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                pedidos.clear();
-                for(DataSnapshot ids : dataSnapshot.getChildren()){
-                    Pedido pedido = ids.getValue(Pedido.class);
+                for(DataSnapshot produtos : dataSnapshot.getChildren()){
+                    Pedido pedido = produtos.getValue(Pedido.class);
                     pedidos.add(pedido);
                 }
-                Collections.reverse(pedidos);
-                arrayAdapter.notifyDataSetChanged();
+                pedidoAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
-
-        return view;
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -176,7 +178,7 @@ public class PedidosFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        query.addValueEventListener(valueEventListenerPedidos);
+        listarPedidos();
     }
 
     @Override

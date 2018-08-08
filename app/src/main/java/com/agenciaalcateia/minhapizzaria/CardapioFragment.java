@@ -4,11 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.agenciaalcateia.minhapizzaria.adapter.ProdutoAdapter;
 import com.agenciaalcateia.minhapizzaria.config.ConfiguracaoFirebase;
@@ -22,9 +22,9 @@ import java.util.ArrayList;
 
 public class CardapioFragment extends Fragment {
 
-    private ListView listView;
-    private ArrayAdapter arrayAdapter;
-    private ArrayList<Produto> cardapio;
+    private RecyclerView recyclerView;
+    private ProdutoAdapter produtoAdapter;
+    private ArrayList<Produto> cardapio = new ArrayList<>();
     private ValueEventListener valueEventListenerProdutos;
     private Query query;
 
@@ -77,37 +77,41 @@ public class CardapioFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cardapio, container, false);
 
-        cardapio = new ArrayList<>();
+        recyclerView = view.findViewById(R.id.rv_cardapio);
 
-        listView = view.findViewById(R.id.lv_cardapio);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
-        arrayAdapter = new ProdutoAdapter(
+        produtoAdapter = new ProdutoAdapter(
                 getActivity(),
                 cardapio
         );
 
-        listView.setAdapter(arrayAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(produtoAdapter);
 
         query = ConfiguracaoFirebase.getFirebase().child("produtos").orderByChild("tipo");
 
-        valueEventListenerProdutos = new ValueEventListener() {
+        return view;
+    }
+
+    public void listarProdutos(){
+
+        valueEventListenerProdutos = query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                cardapio.clear();
                 for(DataSnapshot produtos : dataSnapshot.getChildren()){
                     Produto produto = produtos.getValue(Produto.class);
                     cardapio.add(produto);
                 }
-                arrayAdapter.notifyDataSetChanged();
+                produtoAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
-
-        return view;
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -152,7 +156,7 @@ public class CardapioFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        query.addValueEventListener(valueEventListenerProdutos);
+        listarProdutos();
     }
 
     @Override

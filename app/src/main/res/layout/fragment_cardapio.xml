@@ -5,11 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".CardapioFragment">
 
-    <ListView
-        android:id="@+id/lv_cardapio"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_cardapio"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#CCCCCC"
-        android:dividerHeight="1dp"/>
+        android:scrollbars="vertical" />
 
 </RelativeLayout>

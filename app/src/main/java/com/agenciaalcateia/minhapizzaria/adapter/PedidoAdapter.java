@@ -2,53 +2,63 @@ package com.agenciaalcateia.minhapizzaria.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.agenciaalcateia.minhapizzaria.R;
 import com.agenciaalcateia.minhapizzaria.model.Pedido;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
-public class PedidoAdapter extends ArrayAdapter<Pedido> {
+public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.MyViewHolder> {
 
-    private ArrayList<Pedido> pedidos;
+    private List<Pedido> pedidos;
     private Context context;
     private String valor;
 
-    public PedidoAdapter(@NonNull Context c, @NonNull ArrayList<Pedido> objects ) {
-        super(c, 0, objects);
+    public PedidoAdapter(@NonNull Context c, @NonNull List<Pedido> objects ) {
         this.pedidos = objects;
         this.context = c;
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_pedidos, parent,false);
 
-        View view = null;
+        return new PedidoAdapter.MyViewHolder(view);
+    }
 
-        if(pedidos!=null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        Pedido pedido = pedidos.get(position);
 
-            view = inflater.inflate(R.layout.lista_pedidos, parent, false);
+        valor = "R$" + pedido.getValor();
 
-            TextView textViewProdutos = view.findViewById(R.id.tv_produtos);
-            TextView textViewValor = view.findViewById(R.id.tv_valor);
+        holder.textViewProdutos.setText(pedido.getProdutos());
+        holder.textViewValor.setText(valor);
+    }
 
-            Pedido pedido = pedidos.get(position);
+    @Override
+    public int getItemCount() {
+        return pedidos.size();
+    }
 
-            valor = "R$" + pedido.getValor();
+    public class MyViewHolder extends RecyclerView.ViewHolder{
 
-            textViewProdutos.setText(pedido.getProdutos());
-            textViewValor.setText(valor);
+        TextView textViewProdutos;
+        TextView textViewValor;
+
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            textViewProdutos = itemView.findViewById(R.id.tv_produtos);
+            textViewValor = itemView.findViewById(R.id.tv_valor);
+
         }
-
-        return view;
     }
 }

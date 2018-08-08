@@ -5,13 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".PedidosFragment">
 
-    <ListView
-        android:id="@+id/lv_pedidos"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_cardapio"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#CCCCCC"
-        android:dividerHeight="1dp"
-        android:layout_above="@+id/btn_novo_pedido"/>
+        android:scrollbars="vertical"
+        android:layout_above="@+id/btn_novo_pedido" />
 
     <Button
         android:id="@+id/btn_novo_pedido"

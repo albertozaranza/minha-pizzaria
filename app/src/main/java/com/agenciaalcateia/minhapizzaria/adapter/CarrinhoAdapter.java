@@ -2,61 +2,72 @@ package com.agenciaalcateia.minhapizzaria.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.agenciaalcateia.minhapizzaria.R;
 import com.agenciaalcateia.minhapizzaria.model.Carrinho;
-import com.agenciaalcateia.minhapizzaria.model.Produto;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
-public class CarrinhoAdapter extends ArrayAdapter<Carrinho> {
+public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.MyViewHolder> {
 
-    private ArrayList<Carrinho> produto;
+    private List<Carrinho> produto;
     private Context context;
     private String _produto;
     private String quantidade;
     private String valor;
 
-    public CarrinhoAdapter(@NonNull Context c, @NonNull ArrayList<Carrinho> objects) {
-        super(c, 0, objects);
+    public CarrinhoAdapter(@NonNull Context c, @NonNull List<Carrinho> objects) {
         this.produto = objects;
         this.context = c;
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_carrinho, parent,false);
 
-        View view = null;
+        return new CarrinhoAdapter.MyViewHolder(view);
+    }
 
-        if(produto!=null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-            view = inflater.inflate(R.layout.lista_carrinho, parent, false);
+        Carrinho carrinho = produto.get(position);
 
-            TextView textViewNome = view.findViewById(R.id.tv_produto);
-            TextView textViewQuantidade = view.findViewById(R.id.tv_quantidade);
-            TextView textViewValor = view.findViewById(R.id.tv_valor);
+        _produto = carrinho.getProdudo();
+        quantidade = "Quantidade: " + carrinho.getQuantidade();
+        valor = "Valor: R$" + carrinho.getValor();
 
-            Carrinho carrinho = produto.get(position);
+        holder.textViewNome.setText(_produto);
+        holder.textViewQuantidade.setText(quantidade);
+        holder.textViewValor.setText(valor);
 
-            _produto = carrinho.getProdudo();
-            quantidade = "Quantidade: " + carrinho.getQuantidade();
-            valor = "Valor: R$" + carrinho.getValor();
+    }
 
-            textViewNome.setText(_produto);
-            textViewQuantidade.setText(quantidade);
-            textViewValor.setText(valor);
+    @Override
+    public int getItemCount() {
+        return produto.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder{
+
+        TextView textViewNome;
+        TextView textViewQuantidade;
+        TextView textViewValor;
+
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            textViewNome = itemView.findViewById(R.id.tv_produto);
+            textViewQuantidade = itemView.findViewById(R.id.tv_quantidade);
+            textViewValor = itemView.findViewById(R.id.tv_valor);
 
         }
-
-        return view;
     }
 }
