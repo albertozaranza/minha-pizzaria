@@ -14,6 +14,7 @@ import android.widget.Button;
 
 import com.agenciaalcateia.minhapizzaria.adapter.PedidoAdapter;
 import com.agenciaalcateia.minhapizzaria.config.ConfiguracaoFirebase;
+import com.agenciaalcateia.minhapizzaria.helper.Base64Custom;
 import com.agenciaalcateia.minhapizzaria.model.Pedido;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,15 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PedidosFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PedidosFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PedidosFragment extends Fragment {
 
     private RecyclerView recyclerView;
@@ -41,6 +33,71 @@ public class PedidosFragment extends Fragment {
     private ValueEventListener valueEventListenerPedidos;
     private FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private Query query;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view =  inflater.inflate(R.layout.fragment_pedidos, container, false);
+
+        Button buttonNovoPedido = view.findViewById(R.id.btn_novo_pedido);
+
+        buttonNovoPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), NovoPedidoActivity.class));
+            }
+        });
+
+        recyclerView = view.findViewById(R.id.rv_cardapio);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+
+        pedidoAdapter = new PedidoAdapter(
+                getActivity(),
+                pedidos
+        );
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(pedidoAdapter);
+
+        query = ConfiguracaoFirebase.getFirebase().child("pedidos").child(Base64Custom.codificarBase64(firebaseUser.getEmail())).orderByChild("data");
+
+        return view;
+    }
+
+    public void listarPedidos(){
+
+        valueEventListenerPedidos = query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                pedidos.clear();
+                for(DataSnapshot produtos : dataSnapshot.getChildren()){
+                    Pedido pedido = produtos.getValue(Pedido.class);
+                    pedidos.add(pedido);
+                }
+                pedidoAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        listarPedidos();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        query.removeEventListener(valueEventListenerPedidos);
+    }
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,58 +141,6 @@ public class PedidosFragment extends Fragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_pedidos, container, false);
-
-        Button buttonNovoPedido = view.findViewById(R.id.btn_novo_pedido);
-
-        buttonNovoPedido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), NovoPedidoActivity.class));
-            }
-        });
-
-        recyclerView = view.findViewById(R.id.rv_cardapio);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-
-        pedidoAdapter = new PedidoAdapter(
-                getActivity(),
-                pedidos
-        );
-
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(pedidoAdapter);
-
-        query = ConfiguracaoFirebase.getFirebase().child("pedidos").child(firebaseUser.getUid()).orderByChild("data");
-
-        return view;
-    }
-
-    public void listarPedidos(){
-
-        valueEventListenerPedidos = query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot produtos : dataSnapshot.getChildren()){
-                    Pedido pedido = produtos.getValue(Pedido.class);
-                    pedidos.add(pedido);
-                }
-                pedidoAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -175,15 +180,4 @@ public class PedidosFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        listarPedidos();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        query.removeEventListener(valueEventListenerPedidos);
-    }
 }

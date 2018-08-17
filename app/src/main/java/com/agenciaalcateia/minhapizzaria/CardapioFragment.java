@@ -28,6 +28,63 @@ public class CardapioFragment extends Fragment {
     private ValueEventListener valueEventListenerProdutos;
     private Query query;
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_cardapio, container, false);
+
+        recyclerView = view.findViewById(R.id.rv_cardapio);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+
+        produtoAdapter = new ProdutoAdapter(
+                getActivity(),
+                cardapio
+        );
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(produtoAdapter);
+
+        query = ConfiguracaoFirebase.getFirebase().child("produtos").orderByChild("tipo");
+
+        return view;
+    }
+
+    public void listarProdutos(){
+
+        valueEventListenerProdutos = query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                cardapio.clear();
+                for(DataSnapshot produtos : dataSnapshot.getChildren()){
+                    Produto produto = produtos.getValue(Produto.class);
+                    cardapio.add(produto);
+                }
+                produtoAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        listarProdutos();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        query.removeEventListener(valueEventListenerProdutos);
+    }
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -70,49 +127,7 @@ public class CardapioFragment extends Fragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_cardapio, container, false);
-
-        recyclerView = view.findViewById(R.id.rv_cardapio);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-
-        produtoAdapter = new ProdutoAdapter(
-                getActivity(),
-                cardapio
-        );
-
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(produtoAdapter);
-
-        query = ConfiguracaoFirebase.getFirebase().child("produtos").orderByChild("tipo");
-
-        return view;
-    }
-
-    public void listarProdutos(){
-
-        valueEventListenerProdutos = query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot produtos : dataSnapshot.getChildren()){
-                    Produto produto = produtos.getValue(Produto.class);
-                    cardapio.add(produto);
-                }
-                produtoAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -153,15 +168,4 @@ public class CardapioFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        listarProdutos();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        query.removeEventListener(valueEventListenerProdutos);
-    }
 }

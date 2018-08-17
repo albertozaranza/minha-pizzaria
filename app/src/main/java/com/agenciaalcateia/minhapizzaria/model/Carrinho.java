@@ -5,6 +5,7 @@ public class Carrinho {
     private String produdo;
     private String quantidade;
     private String valor;
+    private String key;
 
     public Carrinho() {
     }
@@ -31,5 +32,13 @@ public class Carrinho {
 
     public void setQuantidade(String quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

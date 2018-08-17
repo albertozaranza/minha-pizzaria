@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 
 import com.agenciaalcateia.minhapizzaria.adapter.ProdutoAdapter;
 import com.agenciaalcateia.minhapizzaria.config.ConfiguracaoFirebase;
+import com.agenciaalcateia.minhapizzaria.helper.Base64Custom;
 import com.agenciaalcateia.minhapizzaria.model.Carrinho;
 import com.agenciaalcateia.minhapizzaria.model.Produto;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +30,7 @@ public class CarrinhoActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ProdutoAdapter produtoAdapter;
-    private ArrayList<Produto> cardapio = new ArrayList<>();;
+    private ArrayList<Produto> cardapio = new ArrayList<>();
     private Query query;
     private ValueEventListener valueEventListenerProdutos;
     private String nome;
@@ -110,7 +111,8 @@ public class CarrinhoActivity extends AppCompatActivity {
                                             carrinho.setQuantidade(quantidade);
                                             carrinho.setValor(valor);
 
-                                            databaseReference.child("carrinho").child(firebaseUser.getUid()).push().setValue(carrinho);
+                                            databaseReference.child("carrinho").child(Base64Custom.codificarBase64(firebaseUser.getEmail())).push().setValue(carrinho);
+                                            finish();
                                         }
                                     });
 
@@ -136,7 +138,8 @@ public class CarrinhoActivity extends AppCompatActivity {
                                             carrinho.setQuantidade(quantidade);
                                             carrinho.setValor(valor);
 
-                                            databaseReference.child("carrinho").child(firebaseUser.getUid()).push().setValue(carrinho);
+                                            databaseReference.child("carrinho").child(Base64Custom.codificarBase64(firebaseUser.getEmail())).push().setValue(carrinho);
+                                            finish();
                                         }
                                     });
 
@@ -156,6 +159,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     }
                 }
         ));
+
     }
 
     public void listarProdutos(){
@@ -163,6 +167,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         valueEventListenerProdutos = query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                cardapio.clear();
                 for(DataSnapshot produtos : dataSnapshot.getChildren()){
                     Produto produto = produtos.getValue(Produto.class);
                     cardapio.add(produto);
@@ -188,4 +193,5 @@ public class CarrinhoActivity extends AppCompatActivity {
         super.onStop();
         query.removeEventListener(valueEventListenerProdutos);
     }
+
 }

@@ -9,7 +9,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.agenciaalcateia.minhapizzaria.R;
+import com.agenciaalcateia.minhapizzaria.config.ConfiguracaoFirebase;
 import com.agenciaalcateia.minhapizzaria.model.Carrinho;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
 
@@ -21,6 +25,8 @@ public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.MyView
     private String _produto;
     private String quantidade;
     private String valor;
+    private DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebase();
+    private FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
     public CarrinhoAdapter(@NonNull Context c, @NonNull List<Carrinho> objects) {
         this.produto = objects;
@@ -70,4 +76,5 @@ public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.MyView
 
         }
     }
+
 }

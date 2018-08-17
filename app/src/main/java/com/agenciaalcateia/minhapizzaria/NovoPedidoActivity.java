@@ -1,15 +1,20 @@
 package com.agenciaalcateia.minhapizzaria;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.agenciaalcateia.minhapizzaria.adapter.CarrinhoAdapter;
 import com.agenciaalcateia.minhapizzaria.config.ConfiguracaoFirebase;
+import com.agenciaalcateia.minhapizzaria.helper.Base64Custom;
 import com.agenciaalcateia.minhapizzaria.model.Carrinho;
 import com.agenciaalcateia.minhapizzaria.model.Pedido;
 import com.google.firebase.auth.FirebaseAuth;
@@ -59,7 +64,28 @@ public class NovoPedidoActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(carrinhoAdapter);
 
-        query = ConfiguracaoFirebase.getFirebase().child("carrinho").child(firebaseUser.getUid());
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(
+                getApplicationContext(),
+                recyclerView,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        removerItem(recyclerView.findViewHolderForAdapterPosition(position));
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    }
+                }
+        ));
+
+        query = ConfiguracaoFirebase.getFirebase().child("carrinho").child(Base64Custom.codificarBase64(firebaseUser.getEmail()));
 
         buttonAdicionarProduto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +98,7 @@ public class NovoPedidoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                databaseReference = ConfiguracaoFirebase.getFirebase().child("pedidos").child(firebaseUser.getUid());
+                databaseReference = ConfiguracaoFirebase.getFirebase().child("pedidos").child(Base64Custom.codificarBase64(firebaseUser.getEmail()));
 
                 Pedido pedido = new Pedido();
                 pedido.setProdutos("Pizza + Suco");
@@ -83,6 +109,13 @@ public class NovoPedidoActivity extends AppCompatActivity {
                 pedido.setData(dateFormat.format(date));
 
                 databaseReference.push().setValue(pedido);
+
+                databaseReference = ConfiguracaoFirebase.getFirebase().child("carrinho").child(Base64Custom.codificarBase64(firebaseUser.getEmail()));
+                databaseReference.removeValue();
+
+                produtos.clear();
+                carrinhoAdapter.notifyDataSetChanged();
+                finish();
             }
         });
 
@@ -93,8 +126,10 @@ public class NovoPedidoActivity extends AppCompatActivity {
         valueEventListenerProdutos = query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                produtos.clear();
                 for(DataSnapshot _produtos : dataSnapshot.getChildren()){
                     Carrinho carrinho = _produtos.getValue(Carrinho.class);
+                    carrinho.setKey(_produtos.getKey());
                     produtos.add(carrinho);
                 }
                 carrinhoAdapter.notifyDataSetChanged();
@@ -118,4 +153,34 @@ public class NovoPedidoActivity extends AppCompatActivity {
         super.onStop();
         query.removeEventListener(valueEventListenerProdutos);
     }
+
+    public void removerItem(final RecyclerView.ViewHolder viewHolder){
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+        alertDialog.setTitle("Excluir");
+        alertDialog.setMessage("Excluir produto?");
+        alertDialog.setCancelable(false);
+
+        alertDialog.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                int position = viewHolder.getAdapterPosition();
+                Carrinho carrinho = produtos.get(position);
+                databaseReference = ConfiguracaoFirebase.getFirebase().child("carrinho").child(Base64Custom.codificarBase64(firebaseUser.getEmail()));
+                databaseReference.child(carrinho.getKey()).removeValue();
+                carrinhoAdapter.notifyItemRemoved(position);
+            }
+        });
+        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(NovoPedidoActivity.this, "Cancelado", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        AlertDialog alert = alertDialog.create();
+        alert.show();
+    }
+
 }
