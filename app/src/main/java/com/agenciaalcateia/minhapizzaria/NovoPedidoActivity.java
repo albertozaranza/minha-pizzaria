@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.agenciaalcateia.minhapizzaria.adapter.CarrinhoAdapter;
 import com.agenciaalcateia.minhapizzaria.config.ConfiguracaoFirebase;
 import com.agenciaalcateia.minhapizzaria.helper.Base64Custom;
+import com.agenciaalcateia.minhapizzaria.helper.RecyclerItemClickListener;
 import com.agenciaalcateia.minhapizzaria.model.Carrinho;
 import com.agenciaalcateia.minhapizzaria.model.Pedido;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,6 +44,8 @@ public class NovoPedidoActivity extends AppCompatActivity {
     private List<Carrinho> produtos = new ArrayList<>();
     private Query query;
     private ValueEventListener valueEventListenerProdutos;
+    private String produtosCarrinho = "";
+    private Double valorCarrinho = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,14 +104,19 @@ public class NovoPedidoActivity extends AppCompatActivity {
 
                 databaseReference = ConfiguracaoFirebase.getFirebase().child("pedidos").child(Base64Custom.codificarBase64(firebaseUser.getEmail()));
 
+                for(int i=0; i<produtos.size(); i++){
+                    Carrinho carrinho = produtos.get(i);
+                    adicionarProduto(carrinho.getProdudo(), carrinho.getValor());
+                }
+
                 Pedido pedido = new Pedido();
-                pedido.setProdutos("Pizza + Suco");
-                pedido.setValor("15,00");
+
+                pedido.setProdutos(produtosCarrinho);
+                pedido.setValor(valorCarrinho.toString().replace(".", ","));
 
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 Date date = new Date();
                 pedido.setData(dateFormat.format(date));
-
                 databaseReference.push().setValue(pedido);
 
                 databaseReference = ConfiguracaoFirebase.getFirebase().child("carrinho").child(Base64Custom.codificarBase64(firebaseUser.getEmail()));
@@ -181,6 +190,11 @@ public class NovoPedidoActivity extends AppCompatActivity {
 
         AlertDialog alert = alertDialog.create();
         alert.show();
+    }
+
+    public void adicionarProduto(String produto, String valor){
+        produtosCarrinho += produto.concat("+");
+        valorCarrinho += Double.parseDouble(valor.replace(",", "."));
     }
 
 }

@@ -1,4 +1,4 @@
-package com.agenciaalcateia.minhapizzaria;
+package com.agenciaalcateia.minhapizzaria.helper;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
