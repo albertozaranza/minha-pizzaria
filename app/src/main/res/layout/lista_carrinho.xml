@@ -22,8 +22,7 @@
             android:paddingLeft="8dp"
             android:paddingBottom="4dp"
             android:paddingTop="2dp"
-            android:layout_weight="1"
-            android:text="{PRODUTO}"/>
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/tv_quantidade"
@@ -34,8 +33,7 @@
             android:paddingRight="8dp"
             android:paddingLeft="8dp"
             android:paddingBottom="4dp"
-            android:paddingTop="2dp"
-            android:text="{QUANTIDADE}"/>
+            android:paddingTop="2dp"/>
 
     </LinearLayout>
 
@@ -51,7 +49,6 @@
         android:paddingBottom="4dp"
         android:paddingTop="2dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:text="{VALOR}"/>
+        android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

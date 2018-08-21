@@ -21,5 +21,7 @@
     <string name="finalizar_pedido">Finalizar pedido</string>
     <string name="novo_pedido">Novo pedido</string>
     <string name="quantidade">Quantidade:</string>
+    <string name="adicionar">Adicionar</string>
+    <string name="total">Total:</string>
 
 </resources>

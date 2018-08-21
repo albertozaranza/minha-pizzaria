@@ -7,10 +7,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agenciaalcateia.minhapizzaria.adapter.CarrinhoAdapter;
@@ -35,8 +35,8 @@ import java.util.List;
 
 public class NovoPedidoActivity extends AppCompatActivity {
 
-    private Button buttonFinalizarPedido;
-    private Button buttonAdicionarProduto;
+    private Button buttonFinalizarPedido, buttonAdicionarProduto;
+    private TextView textViewTotal;
     private FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference databaseReference;
     private RecyclerView recyclerView;
@@ -46,6 +46,7 @@ public class NovoPedidoActivity extends AppCompatActivity {
     private ValueEventListener valueEventListenerProdutos;
     private String produtosCarrinho = "";
     private Double valorCarrinho = 0.0;
+    private Double total = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class NovoPedidoActivity extends AppCompatActivity {
 
         buttonFinalizarPedido = findViewById(R.id.btn_finalizaar_pedido);
         buttonAdicionarProduto = findViewById(R.id.btn_adicionar_produto);
+        textViewTotal = findViewById(R.id.tv_valor);
 
         recyclerView = findViewById(R.id.rv_cardapio);
 
@@ -90,6 +92,27 @@ public class NovoPedidoActivity extends AppCompatActivity {
         ));
 
         query = ConfiguracaoFirebase.getFirebase().child("carrinho").child(Base64Custom.codificarBase64(firebaseUser.getEmail()));
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                total = 0.0;
+                for(DataSnapshot _produtos : dataSnapshot.getChildren()){
+                    Carrinho carrinho = _produtos.getValue(Carrinho.class);
+                    total += Double.parseDouble(carrinho.getValor().replace(",", "."));
+                }
+                String valor = total.toString().replace(".", ",");
+                if(valor.endsWith(",0")){
+                    valor = valor.replace(",0", ",00");
+                }
+                valor = "R$" + valor;
+                textViewTotal.setText(valor);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         buttonAdicionarProduto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,13 +129,25 @@ public class NovoPedidoActivity extends AppCompatActivity {
 
                 for(int i=0; i<produtos.size(); i++){
                     Carrinho carrinho = produtos.get(i);
-                    adicionarProduto(carrinho.getProdudo(), carrinho.getValor());
+                    if(i == produtos.size()-1){
+                        adicionarProduto(carrinho.getProdudo(), carrinho.getValor(), true);
+                    } else {
+                        adicionarProduto(carrinho.getProdudo(), carrinho.getValor(), false);
+                    }
+
                 }
 
                 Pedido pedido = new Pedido();
 
                 pedido.setProdutos(produtosCarrinho);
-                pedido.setValor(valorCarrinho.toString().replace(".", ","));
+
+                String valor = valorCarrinho.toString().replace(".", ",");
+
+                if(valor.endsWith(",0")){
+                    valor = valor.replace(",0", ",00");
+                }
+
+                pedido.setValor(valor);
 
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 Date date = new Date();
@@ -192,8 +227,12 @@ public class NovoPedidoActivity extends AppCompatActivity {
         alert.show();
     }
 
-    public void adicionarProduto(String produto, String valor){
-        produtosCarrinho += produto.concat("+");
+    public void adicionarProduto(String produto, String valor, boolean finalLista){
+        if(finalLista){
+            produtosCarrinho += produto;
+        } else {
+            produtosCarrinho += produto.concat(" + ");
+        }
         valorCarrinho += Double.parseDouble(valor.replace(",", "."));
     }
 
