@@ -3,6 +3,7 @@ package com.agenciaalcateia.minhapizzaria.loginusuario;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginEmailActivity extends AppCompatActivity {
 
     private TextView textViewCadastrar;
-    private EditText editTextEmail, editTextSenha;
+    private TextInputEditText editTextEmail, editTextSenha;
     private Button buttonLogar;
     private Usuario usuario;
     private FirebaseAuth firebaseAuth;
@@ -32,8 +33,8 @@ public class LoginEmailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_email);
 
-        editTextEmail = findViewById(R.id.edit_email);
-        editTextSenha = findViewById(R.id.edit_senha);
+        editTextEmail = findViewById(R.id.text_email);
+        editTextSenha = findViewById(R.id.text_senha);
         buttonLogar = findViewById(R.id.btn_logar);
         textViewCadastrar = findViewById(R.id.text_cadastro);
 

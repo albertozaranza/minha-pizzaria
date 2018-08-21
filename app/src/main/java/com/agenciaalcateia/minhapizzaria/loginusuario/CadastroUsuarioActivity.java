@@ -2,6 +2,7 @@ package com.agenciaalcateia.minhapizzaria.loginusuario;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,7 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class CadastroUsuarioActivity extends AppCompatActivity {
 
-    private EditText editTextNome, editTextEmail, editTextSenha, editTextConfirmarSenha;
+    private TextInputEditText editTextNome, editTextEmail, editTextSenha, editTextConfirmarSenha;
     private Button buttonCadastrar;
     private Usuario usuario;
     private FirebaseAuth firebaseAuth;
@@ -35,10 +36,10 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_usuario);
 
-        editTextNome = findViewById(R.id.edit_nome);
-        editTextEmail = findViewById(R.id.edit_email);
-        editTextSenha = findViewById(R.id.edit_senha);
-        editTextConfirmarSenha = findViewById(R.id.edit_confirmacao_senha);
+        editTextNome = findViewById(R.id.text_nome);
+        editTextEmail = findViewById(R.id.text_email);
+        editTextSenha = findViewById(R.id.text_senha);
+        editTextConfirmarSenha = findViewById(R.id.text_confirmacao_senha);
 
         buttonCadastrar = findViewById(R.id.btn_cadastrar);
 
